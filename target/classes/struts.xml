@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+    <constant name="struts.devMode" value="true"/>
+    <constant name="struts.custom.i18n.resources" value="global"/>
+    <constant name="struts.enable.DynamicMethodInvocation" value="false"/>
+
+    <package name="e-commerce" extends="struts-default">
+
+        <interceptors>
+            <interceptor-stack name="appDefaultStack">
+                <interceptor-ref name="defaultStack">
+                    <param name="exception.logEnabled">true</param>
+                    <param name="exception.logLevel">ERROR</param>
+                </interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+
+        <default-interceptor-ref name="appDefaultStack"/>
+        <global-results>
+            <result name="securityerror">/security.jsp</result>
+            <result name="error">/error.jsp</result>
+        </global-results>
+
+        <global-exception-mappings>
+            <exception-mapping exception="zm.unza.msc.csc5231.ecommerce.utils.exceptions.SecurityBreachException" result="securityerror"/>
+            <exception-mapping exception="java.lang.Exception" result="error"/>
+        </global-exception-mappings>
+
+        <action name="index">
+            <result>/index.jsp</result>
+        </action>
+        <action name="home" class="zm.unza.msc.csc5231.ecommerce.action.HomePageAction">
+            <result name="success">/index.jsp</result>
+        </action>
+        <!--<action name="register" class="zm.unza.msc.csc5231.ecommerce.action.AccountAction>
+            <result name="success">/thankyou.jsp</result>
+            <result name="input">/register.jsp</result>
+        </action>-->
+
+        <!-- Whatever value is before Account for the name of
+        the action will be the name of the method to call in
+        class AccountAction.  For example action createAccount
+        will call a method named create in class AccountAction -->
+
+        <action name="*Account" class="zm.unza.msc.csc5231.ecommerce.action.AccountAction" method="{1}">
+            <result name="success">/view.jsp</result>
+            <result name="input">/input.jsp</result>
+            <allowed-methods>create,edit,saveOrUpdate,delete</allowed-methods>
+        </action>
+
+    </package>
+
+</struts>
